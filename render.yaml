@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ev-adoption-intelligence
+    name: ev-adoption-backend
     runtime: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
@@ -16,3 +16,17 @@ services:
         value: gpt-4o-mini
       - key: DATA_PATH
         value: data/raw/EV_Adoption_Dataset_Recleaned.xlsx
+
+  - type: web
+    name: ev-adoption-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://ev-adoption-backend.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
